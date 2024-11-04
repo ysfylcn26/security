@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog logicalFilePath="db.changelog-1.0.xml" xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+
+    <changeSet id="create-account-table" author="yusuf.yalcin">
+        <sql>
+            CREATE TABLE account (
+                                      id BIGSERIAL PRIMARY KEY,
+                                      deleted BOOLEAN DEFAULT FALSE NOT NULL,
+                                      created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                                      updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                                      email VARCHAR (50) UNIQUE NOT NULL,
+                                      firstname VARCHAR (20) NOT NULL,
+                                      lastname VARCHAR (20) NOT NULL,
+                                      password VARCHAR (250) NOT NULL,
+                                      role VARCHAR (50) NOT NULL
+            );
+        </sql>
+    </changeSet>
+
+    <changeSet id="create-token-table" author="yusuf.yalcin">
+        <sql>
+            CREATE TABLE token (
+                                     id BIGSERIAL PRIMARY KEY,
+                                     created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                                     updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                                     token VARCHAR (256) UNIQUE NOT NULL,
+                                     token_type VARCHAR (20),
+                                     account_id BIGINT NOT NULL,
+                                     expired BOOLEAN,
+                                     revoked BOOLEAN
+
+            );
+            CREATE INDEX idx_token_account_id ON token (account_id);
+        </sql>
+    </changeSet>
+
+    <changeSet id="create-admin" author="yusuf.yalcin">
+        <sql>
+            INSERT INTO account (deleted, email, firstname, lastname, password, role)
+            VALUES (FALSE, 'admin@gmail.com', 'Admin', 'Admin', '$2a$10$SZf9uTpe0/p334b.TS02CeErZqToAd.5/1wLWBYGWnvt1.wsoQaOi', 'ADMIN');
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>

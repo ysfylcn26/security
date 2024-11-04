@@ -1,0 +1,23 @@
+version: '3.9'
+
+services:
+  postgres:
+    image: postgres:16.4-bullseye
+    container_name: postgres_auth_db
+    restart: always
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_DB=authn_authz_db
+      - POSTGRES_USER=authn_authz
+      - POSTGRES_PASSWORD=1234qwer
+    volumes:
+      - postgres_auth_data:/var/lib/postgresql/data
+    networks:
+      - authn_authz_network
+
+volumes:
+  postgres_auth_data:
+
+networks:
+  authn_authz_network:
